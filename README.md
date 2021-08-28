@@ -64,12 +64,14 @@ Esta directiva básicamente sirve para agregar una clase CSS a una etiqueta/elem
 Lo anterior es el atributo que se puede agregar a la etiqueta
 
 ## Routing
-1. Para que se pueda tener un componente por "página" en la app angular es importante que en el html, esté la etiqueta:
-  <base href="/">
-en el head
+1. Para que se pueda tener un componente por "página" en la app angular es importante que en el html, esté la etiqueta: `<base href="/">` en el head
 
 2. Se crea un archivo app-routing dentro de él va a estar toda la configuracion de rutas de la app.
     - Se importan los modulos del ruter de angular
     - Se importan los componentes
-    - Se hace un array de configuracion de rutas
+    - Se hace un array de configuracion de rutas (Array de JSON's, éstos van a tener la estructura {path: '', component: componente})
     - Se exporta el módulo de rutas
+
+3. Se importa el archivo en app.module.ts 
+
+4. Se agrega la etiqueta del sistema de rutas en app.component.html `<router-outlet></router-outlet>`. Esta etiqueta se va a encargar de cargar la ruta que se esta mandando por url de forma dinamica, esta ruta debe de estar definida en el arreglo anteriormente mencionado
