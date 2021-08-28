@@ -40,19 +40,19 @@ Y se usan principalmente en los archivos .html de un cierto componente de la apl
 #### ngFor
 Supongamos que se tiene un componente de zapatos y en el archivo zapatos.componponent.ts existe un atributo "zapatos" el cual contendra los mismos
 Para iterar sobre este arreglo en el archivo html se usa: 
-*ngFor="let e of zapatos" 
+`*ngFor="let e of zapatos"` 
 como atributo de la etiqueta, es decir, vemos que la aparicion de "zapatos" en el archivo html, debe existir como atributo en el archivo ts. Para accede a cada elemento se usa el iterador y los simbolos {{}}
 
 #### ngIf
 Para usar esta directiva se tiene que agregar 
-*ngIf="condicion"
+`*ngIf="condicion"`
 
 ## Evento click y onBlur
 Para poder agregar un evento onClick en algun elemento, se tiene que agregar como atributo lo siguiente.
-(click)="funcion()"
+`(click)="funcion()"`
 
 En el caso de la función onBlur:
-(blur)="funcion()"
+`(blur)="funcion()"`
 
 "funcion()" es el comportamiento que tendrá el elemento al ejecutarse dicho evento
 
@@ -60,7 +60,7 @@ Existen más eventos que se implementan de la misma forma, (p. ej. el evento key
 
 ## Directiva ngClass
 Esta directiva básicamente sirve para agregar una clase CSS a una etiqueta/elemento si se cumple una condicion dada
-[ngClass] = "{'fondoRojo': e.precio>120, 'subrayado': e.marca=='nike'}"
+`[ngClass] = "{'fondoRojo': e.precio>120, 'subrayado': e.marca=='nike'}"`
 Lo anterior es el atributo que se puede agregar a la etiqueta
 
 ## Routing
