@@ -1,0 +1,47 @@
+<h2>{{titulo}}</h2>
+
+
+<ul>
+    <li *ngFor="let e of zapatos" [class.altoPrecio]="e.precio>80" [ngClass] = "{'fondoRojo': e.precio>120, 'subrayado': e.marca=='nike'}">
+       
+            {{e.nombre}}<strong> --> {{e.precio}}</strong>
+    </li>
+   
+</ul>
+
+<hr>
+
+<!-- Two way data binding -->
+<p>Añadir marca</p>
+<p><input type="text" [(ngModel)]="miMarca" (blur)="onBlur()" (keyup.enter)="mostrarPalabra()"></p>
+<p><strong>{{miMarca}}</strong></p>
+<button (click)="getMiMarca()">Mostrar marca</button>
+<button (click)="setMarca(miMarca)">Añadir marca</button>
+
+
+
+<h3>Marcas</h3>
+<ul>
+    <li *ngFor="let marca of marcas; let indice=index">{{marca}}
+        <button (click)="borrarMarca(indice)">Borrar</button>
+    </li>
+</ul>
+
+<hr>
+<!-- <p><input type="text" [(ngModel)]="color"></p> -->
+<p><strong>Cambia color</strong></p>
+<button (click)="setColor('verde')">Verde</button>
+<button (click)="setColor('rojo')">Rojo</button>
+<button (click)="setColor('azul')">Azul</button>
+<button (click)="setColor('naranja')">Naranja</button>
+
+
+<p>El color de la mayoria de nuestros zapatos es: </p>
+<ul [ngSwitch]="color">
+    <li *ngSwitchCase="'verde'" style="background-color: green;">El color predominante es verde</li>
+    <li *ngSwitchCase="'rojo'" style="background-color: red;">El color predominante es rojo</li>
+    <li *ngSwitchCase="'azul'" style="background-color: blue;">El color predominante es azul</li>
+    <li *ngSwitchCase="'naranja'" style="background-color: orange;">El color predominante es naranja</li>
+</ul>
+
+<videojuego></videojuego>

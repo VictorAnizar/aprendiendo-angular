@@ -1,0 +1,21 @@
+<br>
+<br><br><br><br>
+<h2>{{titulo}}</h2>
+<h3>{{listado}}</h3>
+<h3> calificacion: {{calif}}</h3>
+<p *ngIf="calif>=7 && calif<9">notable</p>
+
+
+<button (click)="cambiaTitulo()">CambiaTitulo</button>
+<h2>{{titulo}}</h2>
+<ul>
+    <li>GTA</li>
+    <li>Mario</li>
+    <li>Fortnite</li>
+</ul>
+
+
+<button (click)="aumentaCalif()">Aumentar</button>
+
+<button (click)="reduceCalif()">Reducir</button>
+
