@@ -50,14 +50,25 @@ Lo anterior es el atributo que se puede agregar a la etiqueta
 
 
 Si se quisiera crea un menu de navecaion en la app, se puede crear una etiqueta nav antes de la etiqueta "router-outlet" y se tiene que usar la directiva `[routerLink]`
-El resultado sería `<nav>\n  <a [routerLink]="['/']" [routerLinkActive]="[active]">Home</a>\n  &nbsp;\n  <a [routerLink]="['/zapatos']">Zapatos</a>\n  &nbsp;\n  <a [routerLink]="['/videojuego']">Videojuego</a>\n  &nbsp;\n  <a [routerLink]="['/curso']">curso</a>\n</nav> `
-
+El resultado sería
+`<nav>
+  <a [routerLink]="['/']" [routerLinkActive]="[active]">Home</a>
+  &nbsp;
+  <a [routerLink]="['/zapatos']">Zapatos</a>
+  &nbsp;
+  <a [routerLink]="['/videojuego']">Videojuego</a>
+  &nbsp;
+  <a [routerLink]="['/curso']">curso</a>
+</nav> 
+`
 La directiva ` [routerLinkActive]="[active]" ` sirve para que se le aplique la clase "active" al elemento `<a>`
 
 Si quisieramos que en la URL existan "subrutas" de algun componente, se tiene que agregar una ruta en el arreglo de rutas del punto 2.4.
 `{path: 'curso/:nombre', component: CursoComponent},` sería una "subruta para el componente curso". Además en el componente involucrado, se tiene que hacer ciertas configuraciones:
 
-1. Importar las clases necesarias `import { Router } from '@angular/router';\n import { ActivatedRoute } from '@angular/router';\n import { Params } from '@angular/router';`
+1. Importar las clases necesarias `import { Router } from '@angular/router';
+ import { ActivatedRoute } from '@angular/router';
+  import { Params } from '@angular/router';`
 2. Usar las respectivas clases en el constructor
 
 
