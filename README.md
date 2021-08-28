@@ -39,14 +39,27 @@ Lo anterior es el atributo que se puede agregar a la etiqueta
 1. Para que se pueda tener un componente por "página" en la app angular es importante que en el html, esté la etiqueta: `<base href="/">` en el head
 
 2. Se crea un archivo app-routing dentro de él va a estar toda la configuracion de rutas de la app.
-    - Se importan los modulos del ruter de angular
-    - Se importan los componentes
-    - Se hace un array de configuracion de rutas (Array de JSON's, éstos van a tener la estructura {path: '', component: componente})
-    - Se exporta el módulo de rutas
+    1. Se importan los modulos del ruter de angular
+    2. Se importan los componentes
+    3. Se hace un array de configuracion de rutas (Array de JSON's, éstos van a tener la estructura {path: '', component: componente})
+    4. Se exporta el módulo de rutas
 
 3. Se importa el archivo en app.module.ts 
 
 4. Se agrega la etiqueta del sistema de rutas en app.component.html `<router-outlet></router-outlet>`. Esta etiqueta se va a encargar de cargar la ruta que se esta mandando por url de forma dinamica, esta ruta debe de estar definida en el arreglo anteriormente mencionado
+
+
+Si se quisiera crea un menu de navecaion en la app, se puede crear una etiqueta nav antes de la etiqueta "router-outlet" y se tiene que usar la directiva `[routerLink]`
+El resultado sería `<nav>\n  <a [routerLink]="['/']" [routerLinkActive]="[active]">Home</a>\n  &nbsp;\n  <a [routerLink]="['/zapatos']">Zapatos</a>\n  &nbsp;\n  <a [routerLink]="['/videojuego']">Videojuego</a>\n  &nbsp;\n  <a [routerLink]="['/curso']">curso</a>\n</nav> `
+
+La directiva ` [routerLinkActive]="[active]" ` sirve para que se le aplique la clase "active" al elemento `<a>`
+
+Si quisieramos que en la URL existan "subrutas" de algun componente, se tiene que agregar una ruta en el arreglo de rutas del punto 2.4.
+`{path: 'curso/:nombre', component: CursoComponent},` sería una "subruta para el componente curso". Además en el componente involucrado, se tiene que hacer ciertas configuraciones:
+
+1. Importar las clases necesarias `import { Router } from '@angular/router';\n import { ActivatedRoute } from '@angular/router';\n import { Params } from '@angular/router';`
+2. Usar las respectivas clases en el constructor
+
 
 
 ## Readme default

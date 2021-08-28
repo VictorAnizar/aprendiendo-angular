@@ -318,6 +318,19 @@
 
 <!-- <videojuego *ngIf="mostrar_videojuegos"></videojuego> -->
 <!-- <zapatos></zapatos> -->
+<!-- Menu de navegacion -->
+<nav>
+  <a [routerLink]="['/home']" [routerLinkActive]="['active']">Home</a>
+  &nbsp;
+  <a [routerLink]="['zapatos']" [routerLinkActive]="['active']">Zapatos</a>
+  &nbsp;
+  <a [routerLink]="['videojuego']" [routerLinkActive]="['active']">Videojuego</a>
+  &nbsp;
+  <a [routerLink]="['curso']" [routerLinkActive]="['active']">curso</a>
+</nav>
+
+<hr>
+
 <router-outlet></router-outlet>
 <!-- <p>{{descripcion}}</p>
 <app-counter></app-counter>

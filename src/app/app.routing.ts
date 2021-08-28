@@ -15,9 +15,11 @@ import { Route } from "@angular/compiler/src/core";
 
 const appRoutes: Routes = [
     {path: '', component: HomeComponent},
+    {path: 'home', component: HomeComponent},
     {path: 'zapatos', component: ZapatoComponent},
     {path: 'videojuego', component: VideojuegoComponent},
-    {path: 'cursos', component: CursoComponent},
+    {path: 'curso', component: CursoComponent},
+    {path: 'curso/:nombre', component: CursoComponent},
     {path: '**', component: HomeComponent}
 ];
 
