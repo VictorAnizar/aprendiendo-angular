@@ -1,0 +1,36 @@
+<h3>List of users</h3>
+<div *ngIf="users">
+    <table border="1">
+        <th>Id</th>
+        <th>Email</th>
+        <th>Nombre</th>
+        <th>Avatar</th>
+        <tr *ngFor="let i of users">
+            <td>
+                {{i.id}}
+            </td>
+            <td>
+                {{i.email}}
+            </td>
+            <td>
+                {{i.first_name}}
+            </td>
+            <td>
+                <img src="{{i.avatar}}" width="50px" alt="">
+            </td>
+        </tr>
+    </table> 
+   
+</div>
+
+<hr>
+<h3>Single user</h3>
+<div *ngIf="user">
+    
+    <h2>{{user.first_name}}</h2>
+    <h3>{{user.email}}</h3>
+    <h4>
+        <img src="{{user.avatar}}" width="200px" alt="">
+    </h4>
+</div>
+<hr>
