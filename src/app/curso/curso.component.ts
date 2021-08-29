@@ -21,7 +21,14 @@ export class CursoComponent implements OnInit {
     this._route.params.subscribe((params: Params)=>{
       this.nombre=params.nombre; 
       console.log(this.nombre); 
+      if(this.nombre=="ninguno"){
+        this.redirigir();
+      }
     })
+  }
+
+  redirigir(){
+    this._router.navigate(['/zapatos']);
   }
 
 }

@@ -19,6 +19,9 @@ como atributo de la etiqueta, es decir, vemos que la aparicion de "zapatos" en e
 Para usar esta directiva se tiene que agregar 
 `*ngIf="condicion"`
 
+Si quisieramos agregar un else, se puede usar la etiqueta ng-template, la cual contendrá la vista que queremos que se muestre en un else. Esta etiqueta tiene como atributo un identificador. En otras palabras, el contenido de la sentencia "else" tiene un identificador.
+Es importante mencionar que para que se use lo anterior, se debe colocar un ";" despues de ' *ngIf="condicion" ', seguido de la palabra "else" y seguido del identificador
+
 ## Evento click y onBlur
 Para poder agregar un evento onClick en algun elemento, se tiene que agregar como atributo lo siguiente.
 `(click)="funcion()"`
