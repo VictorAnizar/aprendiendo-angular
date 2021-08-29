@@ -1,29 +1,29 @@
 import { Component, OnInit } from "@angular/core";
 import { Zapato } from "../models/zapato";
+import { ZapatoService } from "../services/zapato.service";
 
 @Component({
     selector: "zapatos",
-    templateUrl: './zapatos.component.html'
+    templateUrl: './zapatos.component.html',
+    providers: [ZapatoService]
 })
 export class ZapatoComponent implements OnInit {
     //asignar un valor aqui no es la mejor practica
     public titulo: string = "componente de zapatos"
     public zapatos: Array<Zapato>;
+
     public marcas: String[];
     public color: string;
     public miMarca: string;
-    constructor() {
+    constructor(
+        private _zapatoService: ZapatoService
+    ) {
         this.miMarca="fila"
         this.color='rojo';
         this.marcas = new Array;
-        this.zapatos = [
-            new Zapato('adidas90', 'adidas', 'rojo', 70, true),
-            new Zapato('nike2', 'nike', 'azul', 120, true),
-            new Zapato('nike233', 'nike', 'azul', 120, false)
-        ];
+        this.zapatos=     this._zapatoService.getZapatos();
     }
     ngOnInit() {
-        console.log(this.zapatos);
         this.getMarcas();
     }
     getMarcas() {

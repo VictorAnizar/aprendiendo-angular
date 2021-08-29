@@ -75,6 +75,21 @@ Si quisieramos que en la URL existan "subrutas" de algun componente, se tiene qu
 2. Usar las respectivas clases en el constructor
 
 
+## Servicios
+
+Los servicios son clases cuyo objetivo principal es abstraer la logica princiapl de la app. Éstas clases nos proveen de distintos métodos para hacer peticiones a un servidor (p. ej.).
+Los servicios se encargan de proveer info a un determinado componente.
+Para empezar a crearlos, se puede empezar por la creacion de la carpeta `/services` dentro de `/app`. Un servicio puede ser `zapato.service.ts`:
+1. Se debe importar la clase Injectable y la clase del componente en cuestion
+2. Se agrega el decorador `@injectable` seguido de la declaracion de la clase. Es importante agregar la palabra reservada `export` para poder incluir el servicio en el componente.
+3. Se importa el servicio creado en el componente en cuestion:
+  1. Se importa el servicio con la palabra reservada `import`
+  2. Se agrega la key "providers" en el decorador "Component" antes de la declaracion de la clase del componente
+  3. Se crea un atributo del tipo del servicio creado en la parte de los argumentos del constructor para evitarse crear mucho codigo
+  4. Se usa el servicio como tal.
+
+## Peticiones AJAX a un servicio externo
+
 
 ## Readme default
 
