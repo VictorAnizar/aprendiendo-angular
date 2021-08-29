@@ -90,6 +90,13 @@ Para empezar a crearlos, se puede empezar por la creacion de la carpeta `/servic
 
 ## Peticiones AJAX a un servicio externo
 
+Para consumir un servicio externo, es muy similar a consumir un servicio "local". La diferencia aqui es que se tiene que importar la clase `HttpClient, HttpHeaders` y `Observable`.
+Se siguien los puntos 1, 2 y 3 de "Servicios"
+Se crea un atributo que contrndrá la URL principal del servicio exterior, por ejemplo: `https://reqres.in`, a partir de esta URL se pueden ir agregando las "subrutas" para que se consulte determinada informacion. Por ejemplo si se quisiera obtener todos los usuarios de la API, se deberia de crear una funcion que devuelva los usuarios:
+<kbd>getUsers(): Observable<any>{
+        return this._http.get(this.url+"/api/users?page=2");
+}</kbd>
+
 
 ## Readme default
 
