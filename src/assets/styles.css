@@ -12,3 +12,7 @@
 .active{
     border: 3px solid yellow;
 }
+
+.notActive{
+    border: none;
+}

@@ -10,6 +10,7 @@ import { PeticionesService } from '../services/peticiones.service';
 export class ExternoComponent implements OnInit {
   public user: any;
   public users: any;
+  public statusColor=false;
   constructor(
     private _peticionesService: PeticionesService,
   ) {}
@@ -34,7 +35,9 @@ export class ExternoComponent implements OnInit {
       }
     );
   }
-
+  cambiaColor(){
+    this.statusColor=!this.statusColor;
+  }
   
 
 }
