@@ -1,8 +1,42 @@
 # AprendiendoAngular
 
+## Generando un proyecto
+
+Para generar un proyecto de angular nuevo basta con escribir el comando `ng new nombreProyecto`. Ejecurar esto hará que estén listos todos los archivos para desarrollo
+
+### Preparando un archivo para producción
+Para que un proyecto de Anglar deje de estar en desarrollo y pase a producción, es necesario ejecutar el comando `ng build --prod`.
+Lo anterior generará una carpeta `dist/` la cual contendrá los archivos listos para desplegarse a producción.
+
+## String interpolation
+Este concepto es util para que ejecutemos sentencias sencillas dentro de nuestro archivo html de nuestro componente, para ello, basta con escribir
+`{{miSentencia}}`
+
+### Enlace útil
+<https://gustavodohara.com/blogangular/banana-in-box-banana-la-caja/>
+
 ## Componentes
 Un componente puede ser desde cualquier elemento de la página (el navbar, un formulario, un boton) hasta la página en Sí
 Está compuesto por una plantilla (archivo html que será lo visual), un archivo ts que tendrá la declaracion de la clase del componente y su respectiva configuracion y logica y un archivo css para la parte de estilos del componente
+
+### Enviar datos a un componente
+El `Property binding` y `Event binding` nos permiten enviar y recibir datos de un componente.
+Para que nuestro componente pueda recibir información, se le debe importar la clase `Input`. Esto es para que se pueda agregar el decorador `@input` a una determinada variable.
+Para que nuestro componente pueda recibir informacion, es necesario que en la llamada de su etiqueta, se agregue un atributo con el nombre de la variable con el decorador. 
+En cuanto a la salida de datos del componente, podemos decir que ya se ha usado con los eventos (click). Sin embargo también se debe de agregar la respectiva clase `Output`
+
+### Ciclo de vida de los componentes
+Todo componente tiene una serie de "steps" que determinan parte de su ciclo de vida, estos "steps" o proceso tienen el siguiente orden
+
+#### 1. Constructor
+#### 2. ngOnChanges
+#### 3. ngOninit
+#### 4. ngDoCheck
+#####    - ngAfterContentInit
+#####    - ngAfterContentChecked
+#####    - ngAfterViewInit
+#####    - ngAfterViewChecked
+#### 5. ngOnDestroy 
 
 ## Directivas estructurales (ngIf, ngFor)
 Estas directivas cumplen el trabajo de las estructuras de control convencionales (condicional if, ciclo for, condicionales switch)
@@ -14,10 +48,16 @@ Supongamos que se tiene un componente de zapatos y en el archivo zapatos.componp
 Para iterar sobre este arreglo en el archivo html se usa: 
 `*ngFor="let e of zapatos"` 
 como atributo de la etiqueta, es decir, vemos que la aparicion de "zapatos" en el archivo html, debe existir como atributo en el archivo ts. Para accede a cada elemento se usa el iterador y los simbolos {{}}
+<strong>LOS OBJETOS NO SON ITERABLES</strong>
+
 
 #### ngIf
 Para usar esta directiva se tiene que agregar 
 `*ngIf="condicion"`
+
+#### ngSwitch
+Se usa para ejecutar una condicion dependiendo de la condicioon, es para ahorrarse muchas lineas de código que involucran al if.
+Para ello, solo debemos escribir en una etiqueta: `[ngSwitch]="variableVerificadora"` y dentro de ésta, crear nuevas etiquetas con las posibles entradas para la variableVerificadora, tal que así: `*ngSwitchCase="caso"`. En caso de que no haya coincidencia, se puede usar el default: `*ngSwitchDefault`
 
 Si quisieramos agregar un else, se puede usar la etiqueta ng-template, la cual contendrá la vista que queremos que se muestre en un else. Esta etiqueta tiene como atributo un identificador. En otras palabras, el contenido de la sentencia "else" tiene un identificador.
 Es importante mencionar que para que se use lo anterior, se debe colocar un ";" despues de ' *ngIf="condicion" ', seguido de la palabra "else" y seguido del identificador
@@ -97,6 +137,29 @@ Se crea un atributo que contrndrá la URL principal del servicio exterior, por e
         return this._http.get(this.url+"/api/users?page=2");
 }</kbd>
 
+
+## Pipes
+
+Un pipe es un pequeño trozo de códiogo que nos permite agregar una pequela funcionalidad en nuestras vistas
+Existen Pipes para fechas, transformar caracteres, entre muchas más
+
+- Pipes para fechas
+- Pipes para textos
+
+Tambien nosotros podemos crear nuestros pipes, para esto lo ideal es crear una carpeta de pipes, dentro de ella creamos los pipes que queramos. Cada archivo debe importar las clases Pipe: `import { Pipe, PipeTransform } from "@angular/core";`
+Así mismo, debemos de agregar un decorador a la clase, en éste puede estar el nombre del pipe como tal.
+Posterior a esto, se debe implementar en la clase, la clase PipeTransform. Al implementar la anterior, se debe definir el método `transform()`, en donde el primer parámetro que recibe es la entrada del pipe y el segundo parametro que recibe es la salida del pipe:
+`entrada | nombrePipe: salida`
+
+## Formularios de contacto
+
+Si se desea crear un formulario de contacto, lo primero que se puede hacer es crear el "esqueleto" en la vista del html, posterio a esto, se debe nombrar el formluario de contacto, es decir, se debe de implementar una estructura parecida a esta en los atributos de la etiqueta form:
+`#contacto="ngForm"`, así mismo, se puede agregar un evento `(ngSubmit)="funccion"` para que se ejecute algo despues de darle click al boton de enviar.
+
+En el caso específico de los formularios de contacto, es recomendable crear un modelo para contaco, por ejemplo, se puede crear un modelo llamado "contactoUsuario". En el archivo de este modelo, unicamente va a contener la estructura gral de la clase usuario: respectivos atributos y métodos.
+En el componente de contacto como tal, es importante importar el modelo anterior, se puede crear en este componente, un atributo que sea del tipo del modelo y en el constructor del componente, inicializar este atributo.
+
+Volviendo a la vista del componente, cada input se debe relacionar con cada atributo del componente como tal. Esto se logra con la directiva `[(ngModel)="atributo"]`. Esto, con el objetivo de que cuando se de click al boton de enviar, se pueda tener acceso al objeto contactoUsuario declarado en el componente como tal.
 
 ## Readme default
 

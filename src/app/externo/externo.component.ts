@@ -10,21 +10,16 @@ import { PeticionesService } from '../services/peticiones.service';
 export class ExternoComponent implements OnInit {
   public user: any;
   public users: any;
+  public userId=2;
   public statusColor=false;
+  public fecha: any;
   constructor(
     private _peticionesService: PeticionesService,
   ) {}
 
   ngOnInit(): void {
-    this._peticionesService.getUser().subscribe(
-      result =>{
-        console.log(result);
-        this.user=((result.data));
-      },
-      error =>{
-        console.log(<any>error);
-      }
-    );
+    this.fecha=new Date();
+    this.cargaUsuario()
     this._peticionesService.getUsers().subscribe(
       result =>{
         console.log(result.data);
@@ -37,6 +32,20 @@ export class ExternoComponent implements OnInit {
   }
   cambiaColor(){
     this.statusColor=!this.statusColor;
+  }
+  cargaUsuario(){
+    setTimeout(()=>{
+      
+    this._peticionesService.getUser(this.userId).subscribe(
+      result =>{
+        console.log(result);
+        this.user=((result.data));
+      },
+      error =>{
+        console.log(<any>error);
+      }
+    );
+    }, 1000);
   }
   
 

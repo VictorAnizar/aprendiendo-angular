@@ -1,14 +1,16 @@
-
+<h2>Fecha del dia de hoy</h2>
+<!-- Uso de pipes -->
+<h3>{{fecha | date:'dd - MM - yy'}}</h3>
 <h3>List of users</h3>
 <div *ngIf="users">
     <table border="1">
         <tr>
             <th>Id</th>
-        <th>Email</th>
-        <th>Nombre</th>
-        <th>Avatar</th>
+            <th>Email</th>
+            <th>Nombre</th>
+            <th>Avatar</th>
         </tr>
-        <tr *ngFor="let i of users" >
+        <tr *ngFor="let i of users">
             <td>
                 {{i.id}}
             </td>
@@ -22,18 +24,29 @@
                 <img src="{{i.avatar}}" width="50px" alt="">
             </td>
         </tr>
-    </table> 
-   
+    </table>
+
 </div>
 
 <hr>
+
+<input type="text" [(ngModel)]="userId" (keyup.enter)="cargaUsuario()">
+
 <h3>Single user</h3>
-<div style="background-color: burlywood;" *ngIf="user" (click)="cambiaColor()" [ngClass]="statusColor ? 'active' : 'notActive' ">
-    
-    <h2>{{user.first_name}}</h2>
+<div *ngIf="user; then usuario_cargado else usuario_no_cargado">
+    Cargando
+</div>
+<ng-template #usuario_cargado>
+    <!-- Uso de pipe para textos -->
+    <h2>{{user.first_name | uppercase}}</h2>
     <h3>{{user.email}}</h3>
     <h4>
         <img src="{{user.avatar}}" width="200px" alt="">
     </h4>
-</div>
+</ng-template>
+<ng-template #usuario_no_cargado>
+    <p>Cargando</p>
+</ng-template>
 <hr>
+
+{{4   | calculadora: 2}}
