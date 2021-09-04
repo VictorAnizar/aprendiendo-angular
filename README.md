@@ -29,14 +29,17 @@ En cuanto a la salida de datos del componente, podemos decir que ya se ha usado 
 Todo componente tiene una serie de "steps" que determinan parte de su ciclo de vida, estos "steps" o proceso tienen el siguiente orden
 
 #### 1. Constructor
+Se usa para cargar el componente y ponerlo en la interfaz
 #### 2. ngOnChanges
+Detecta cambios cada vez que se tiene un input
 #### 3. ngOninit
+Se ejecuta una sola vez cuando el componente ya esta listo en pantalla. Es ideal para hacer llamadas a API's
 #### 4. ngDoCheck
-#####    - ngAfterContentInit
-#####    - ngAfterContentChecked
-#####    - ngAfterViewInit
-#####    - ngAfterViewChecked
+Detecta cuándo los elementos hijos del componente son puestos en la interfaz. <strong>Este metodo no puede estar junto con ngOnChanges debido a que los dos están dedicados a detectar cambios. Se coloca uno u otro</strong>
 #### 5. ngOnDestroy 
+Detecta cuando el componente es eliminado de la interfaz
+
+
 
 ## Directivas estructurales (ngIf, ngFor)
 Estas directivas cumplen el trabajo de las estructuras de control convencionales (condicional if, ciclo for, condicionales switch)
