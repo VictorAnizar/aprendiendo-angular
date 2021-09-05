@@ -15,15 +15,36 @@ Este concepto es util para que ejecutemos sentencias sencillas dentro de nuestro
 ### Enlace útil
 <https://gustavodohara.com/blogangular/banana-in-box-banana-la-caja/>
 
+## Pipes
+
+Un pipe es un pequeño trozo de códiogo que nos permite agregar una pequela funcionalidad en nuestras vistas
+Existen Pipes para fechas, transformar caracteres, entre muchas más
+
+- Pipes para fechas
+- Pipes para textos
+
+Tambien nosotros podemos crear nuestros pipes, para esto lo ideal es crear una carpeta de pipes, dentro de ella creamos los pipes que queramos. Cada archivo debe importar las clases Pipe: `import { Pipe, PipeTransform } from "@angular/core";`
+Así mismo, debemos de agregar un decorador a la clase, en éste puede estar el nombre del pipe como tal.
+Posterior a esto, se debe implementar en la clase, la clase PipeTransform. Al implementar la anterior, se debe definir el método `transform()`, en donde el primer parámetro que recibe es la entrada del pipe y el segundo parametro que recibe es la salida del pipe:
+`entrada | nombrePipe: salida`
+
+Para generar un pipe propio se usa ``ng generate p nombrePipe`
+
+Los Pipes tienen muy buen rendimiento, por lo que puede ser mejor, en algunos casos, usarlos en vez de las funciones
+
 ## Componentes
 Un componente puede ser desde cualquier elemento de la página (el navbar, un formulario, un boton) hasta la página en Sí
 Está compuesto por una plantilla (archivo html que será lo visual), un archivo ts que tendrá la declaracion de la clase del componente y su respectiva configuracion y logica y un archivo css para la parte de estilos del componente
 
+Para generar un componente, se usa `ng generate component nombreComponent`
+
 ### Enviar datos a un componente
 El `Property binding` y `Event binding` nos permiten enviar y recibir datos de un componente.
 Para que nuestro componente pueda recibir información, se le debe importar la clase `Input`. Esto es para que se pueda agregar el decorador `@input` a una determinada variable.
+`@Input() product: Product;`
 Para que nuestro componente pueda recibir informacion, es necesario que en la llamada de su etiqueta, se agregue un atributo con el nombre de la variable con el decorador. 
 En cuanto a la salida de datos del componente, podemos decir que ya se ha usado con los eventos (click). Sin embargo también se debe de agregar la respectiva clase `Output`
+`@Output() productClicked: EventEmitter<any> = new EventEmitter();`
 
 ### Ciclo de vida de los componentes
 Todo componente tiene una serie de "steps" que determinan parte de su ciclo de vida, estos "steps" o proceso tienen el siguiente orden
@@ -64,6 +85,12 @@ Para ello, solo debemos escribir en una etiqueta: `[ngSwitch]="variableVerificad
 
 Si quisieramos agregar un else, se puede usar la etiqueta ng-template, la cual contendrá la vista que queremos que se muestre en un else. Esta etiqueta tiene como atributo un identificador. En otras palabras, el contenido de la sentencia "else" tiene un identificador.
 Es importante mencionar que para que se use lo anterior, se debe colocar un ";" despues de ' *ngIf="condicion" ', seguido de la palabra "else" y seguido del identificador
+
+
+### Directivas propias
+Tambien podemos crear nuestras propias directivas para que se puedan usar en algun elemento html
+Para ello, se debe ejecutar `ng g d nombreDirectiva`.
+Para que se pueda usar en algun elemento html, se debe importar la clase `ElementRef` y hacer una inyección de dependencias en el constructor (en la parte de los parámetros declarar un elemento de clase importada), En el cuerpo del constructor se debe usar el elemento creado con esta inyección
 
 ## Evento click y onBlur
 Para poder agregar un evento onClick en algun elemento, se tiene que agregar como atributo lo siguiente.
@@ -140,19 +167,6 @@ Se crea un atributo que contrndrá la URL principal del servicio exterior, por e
         return this._http.get(this.url+"/api/users?page=2");
 }</kbd>
 
-
-## Pipes
-
-Un pipe es un pequeño trozo de códiogo que nos permite agregar una pequela funcionalidad en nuestras vistas
-Existen Pipes para fechas, transformar caracteres, entre muchas más
-
-- Pipes para fechas
-- Pipes para textos
-
-Tambien nosotros podemos crear nuestros pipes, para esto lo ideal es crear una carpeta de pipes, dentro de ella creamos los pipes que queramos. Cada archivo debe importar las clases Pipe: `import { Pipe, PipeTransform } from "@angular/core";`
-Así mismo, debemos de agregar un decorador a la clase, en éste puede estar el nombre del pipe como tal.
-Posterior a esto, se debe implementar en la clase, la clase PipeTransform. Al implementar la anterior, se debe definir el método `transform()`, en donde el primer parámetro que recibe es la entrada del pipe y el segundo parametro que recibe es la salida del pipe:
-`entrada | nombrePipe: salida`
 
 ## Formularios de contacto
 
