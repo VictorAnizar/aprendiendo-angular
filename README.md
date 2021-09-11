@@ -86,6 +86,10 @@ Para ello, solo debemos escribir en una etiqueta: `[ngSwitch]="variableVerificad
 Si quisieramos agregar un else, se puede usar la etiqueta ng-template, la cual contendrá la vista que queremos que se muestre en un else. Esta etiqueta tiene como atributo un identificador. En otras palabras, el contenido de la sentencia "else" tiene un identificador.
 Es importante mencionar que para que se use lo anterior, se debe colocar un ";" despues de ' *ngIf="condicion" ', seguido de la palabra "else" y seguido del identificador
 
+### Directiva ngClass
+Esta directiva básicamente sirve para agregar una clase CSS a una etiqueta/elemento si se cumple una condicion dada
+`[ngClass] = "{'fondoRojo': e.precio>120, 'subrayado': e.marca=='nike'}"`
+Lo anterior es el atributo que se puede agregar a la etiqueta
 
 ### Directivas propias
 Tambien podemos crear nuestras propias directivas para que se puedan usar en algun elemento html
@@ -103,10 +107,58 @@ En el caso de la función onBlur:
 
 Existen más eventos que se implementan de la misma forma, (p. ej. el evento keyup)
 
-## Directiva ngClass
-Esta directiva básicamente sirve para agregar una clase CSS a una etiqueta/elemento si se cumple una condicion dada
-`[ngClass] = "{'fondoRojo': e.precio>120, 'subrayado': e.marca=='nike'}"`
-Lo anterior es el atributo que se puede agregar a la etiqueta
+
+## Modulos y Rutas
+
+Una buena Práctica es crear componentes para cada página del sitio, sin embargo es una mucho mejor práctica si ése componente "página" se modulariza con la ayuda de Lazy Load
+
+Por ejemplo, si se quisiera abstraer completamente la página "home", tendría que crearse dentro de `src/app/components/home` una serie de carpetas y archivos para que el componente "home" realmente se modularice. Dentro de él habría una carpeta `components/`, `directives/`, etc que únicamente "home" utilice, en cuanto a los archivos, se tiene que crear uno para rutas (`home-routing.module.ts`) y uno para el módulo "home" en Sí (`home.module.ys`). El modulo de home para las rutas tendría lo siguiente 
+```
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { HomeComponent } from './components/home/home.component';
+
+const routes: Routes = [
+    {
+        path: '',
+        component: HomeComponent
+    }
+];
+
+@NgModule({
+    imports: [
+        RouterModule.forChild(routes)
+    ],
+    exports: [
+        RouterModule
+    ]
+})
+export class HomeRoutingModule{
+
+}
+```
+Sin embargo, en el archivo del módulo del home,, tenemos que importar todo lo que el componente usa (Componentes, Pipes, directivas e, incluso, el componente home en sí):
+```
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { BannerComponent } from './components/banner/banner.component';
+import { HomeComponent } from './components/home/home.component';
+import { HomeRoutingModule } from './home-routing.module';
+
+@NgModule({
+  declarations: [    HomeComponent, BannerComponent  ],
+  imports: [
+    HomeRoutingModule,CommonModule 
+  ]
+})
+export class HomeModule { }
+
+```
+
+Esto, es en cuanto a la configuracion de archivos y directorios del ahora módulo (antes componente) "home"
+
+Los modulos y rutas sirven para abstraer y dividir mejor por dominio nuestra aplicación.
+En Angular tenemos 2 modulos especiales: `Core` y `Shered`, el primero sirve para guardar todos los servicios o componentes que se van a usar en todos los otros modulos, es decir, se genera una sola referencia de él, peculiarmente aquí se puede tener un servicio de autentificacion ya que en una aplicacion real, solo debe existir un servicio que maneje la autentificacion de los usuarios. En cuanto al modulo shered, aquí se pueden tener componentes y servicios compartidos, por ejemplo un componente que es utilizado por distintos modulos.
 
 ## Routing
 1. Para que se pueda tener un componente por "página" en la app angular es importante que en el html, esté la etiqueta: `<base href="/">` en el head
@@ -177,6 +229,11 @@ En el caso específico de los formularios de contacto, es recomendable crear un 
 En el componente de contacto como tal, es importante importar el modelo anterior, se puede crear en este componente, un atributo que sea del tipo del modelo y en el constructor del componente, inicializar este atributo.
 
 Volviendo a la vista del componente, cada input se debe relacionar con cada atributo del componente como tal. Esto se logra con la directiva `[(ngModel)="atributo"]`. Esto, con el objetivo de que cuando se de click al boton de enviar, se pueda tener acceso al objeto contactoUsuario declarado en el componente como tal.
+
+## Lazy load
+Es una técnicq profesiona el angular que sirve para reducir el peso de las aplicaciones para hacer que carguen más rápido. Se basa en fragmentar ciertos archivos JS para que estos pequeños fragmentos se carguen solo cuando sea necesario. 
+Para usar ésta técnica es necesario modularizar nuestro proyecto.
+Los componentes que funcionan como páginas como tal, se pueden dividir en módulos (generar archivos .module.ts y agregar respectivas importaciones de clases). dentro de la carpeta del componente que actúa como página (p. ej. componente home), se debe crear una carpeta components en donde estarán los componentes que usa el componente home
 
 ## Readme default
 
