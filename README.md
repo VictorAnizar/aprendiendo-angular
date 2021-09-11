@@ -113,7 +113,7 @@ Existen más eventos que se implementan de la misma forma, (p. ej. el evento key
 Una buena Práctica es crear componentes para cada página del sitio, sin embargo es una mucho mejor práctica si ése componente "página" se modulariza con la ayuda de Lazy Load
 
 Por ejemplo, si se quisiera abstraer completamente la página "home", tendría que crearse dentro de `src/app/components/home` una serie de carpetas y archivos para que el componente "home" realmente se modularice. Dentro de él habría una carpeta `components/`, `directives/`, etc que únicamente "home" utilice, en cuanto a los archivos, se tiene que crear uno para rutas (`home-routing.module.ts`) y uno para el módulo "home" en Sí (`home.module.ys`). El modulo de home para las rutas tendría lo siguiente 
-```
+```javascript
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
@@ -157,7 +157,7 @@ export class HomeModule { }
 
 Esto, es en cuanto a la configuracion de archivos y directorios del ahora módulo (antes componente) "home". Sin embargo, también se tienen que modificar algunos archivos que estaba utilizando a "home" como componente. 
 El archivo `app.module.ts` sufrió la modificación de que se le tiene que eliminar en sus declaraciones e importaciones al, antes componente, "home"
-```
+```javascript
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
@@ -216,7 +216,7 @@ export class AppModule { }
 
 ```
 El otro archivo a modificar para que todo funcione correctamente es `app-routing.module.ts`. En él, lo que se modifica es el arreglo de objetos de rutas, debido a que éstos objetos "invocan" a componentes como tal, Se modificar de tal forma que esta vez se invoque a un módulo como tal, quedando de la sig. forma:
-```
+```javascript
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes, PreloadAllModules } from '@angular/router';
 // import { HomeComponent } from './components/home/home.component';
