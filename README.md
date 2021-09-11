@@ -281,7 +281,8 @@ En Angular tenemos 2 modulos especiales: `Core` y `Shered`, el primero sirve par
 
 Si se quisiera crea un menu de navecaion en la app, se puede crear una etiqueta nav antes de la etiqueta "router-outlet" y se tiene que usar la directiva `[routerLink]`
 El resultado sería
-`<nav>
+```
+<nav>
   <a [routerLink]="['/']" [routerLinkActive]="[active]">Home</a>
   &nbsp;
   <a [routerLink]="['/zapatos']">Zapatos</a>
@@ -290,7 +291,7 @@ El resultado sería
   &nbsp;
   <a [routerLink]="['/curso']">curso</a>
 </nav> 
-`
+```
 La directiva ` [routerLinkActive]="[active]" ` sirve para que se le aplique la clase "active" al elemento `<a>`
 
 Si quisieramos que en la URL existan "subrutas" de algun componente, se tiene que agregar una ruta en el arreglo de rutas del punto 2.4.
