@@ -155,7 +155,112 @@ export class HomeModule { }
 
 ```
 
-Esto, es en cuanto a la configuracion de archivos y directorios del ahora módulo (antes componente) "home"
+Esto, es en cuanto a la configuracion de archivos y directorios del ahora módulo (antes componente) "home". Sin embargo, también se tienen que modificar algunos archivos que estaba utilizando a "home" como componente. 
+El archivo `app.module.ts` sufrió la modificación de que se le tiene que eliminar en sus declaraciones e importaciones al, antes componente, "home"
+```
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { ProductComponent } from './components/product/product.component';
+import { CartComponent } from './components/cart/cart.component';
+import { ExponentialPipe } from './pipes/exponential/exponential.pipe';
+import { SumaPipePipe } from './pipes/suma/suma-pipe.pipe';
+import { HighlightDirective } from './directives/highlight/highlight.directive';
+// import { HomeComponent } from './components/home/home.component';
+import { ProductsComponent } from './components/products/products.component';
+import { ContactComponent } from './components/contact/contact.component';
+import { PruebasComponent } from './components/pruebas/pruebas.component';
+import { HeaderComponent } from './components/header/header.component';
+import { FooterComponent } from './components/footer/footer.component';
+//import { BannerComponent } from './components/banner/banner.component';
+import { PaginaNoEncontradaComponent } from './components/pagina-no-encontrada/pagina-no-encontrada.component';
+import { ProductDetailComponent } from './components/product-detail/product-detail.component';
+import { ServicioCardComponent } from './components/servicioCard/servicio-card/servicio-card.component';
+import { ServiciosCardsComponent } from './components/serviciosCards/servicios-cards/servicios-cards.component';
+import { ServicioDetailComponent } from './components/servicio-detail/servicio-detail/servicio-detail.component';
+import { LayoutComponent } from './components/layout/layout.component';
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    ProductComponent,
+    CartComponent,
+    ExponentialPipe,
+    SumaPipePipe,
+    HighlightDirective,
+    // HomeComponent,
+    ProductsComponent,
+    ContactComponent,
+    PruebasComponent,
+    HeaderComponent,
+    FooterComponent,
+    //BannerComponent,
+    PaginaNoEncontradaComponent,
+    ProductDetailComponent,
+    ServicioCardComponent,
+    ServiciosCardsComponent,
+    ServicioDetailComponent,
+    LayoutComponent
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+```
+El otro archivo a modificar para que todo funcione correctamente es `app-routing.module.ts`. En él, lo que se modifica es el arreglo de objetos de rutas, debido a que éstos objetos "invocan" a componentes como tal, Se modificar de tal forma que esta vez se invoque a un módulo como tal, quedando de la sig. forma:
+```
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes, PreloadAllModules } from '@angular/router';
+// import { HomeComponent } from './components/home/home.component';
+import { ProductsComponent } from './components/products/products.component';
+import { ContactComponent } from './components/contact/contact.component';
+import { PruebasComponent } from './components/pruebas/pruebas.component';
+import { PaginaNoEncontradaComponent } from './components/pagina-no-encontrada/pagina-no-encontrada.component';
+import { ProductDetailComponent } from './components/product-detail/product-detail.component';
+import { ServiciosCardsComponent } from './components/serviciosCards/servicios-cards/servicios-cards.component';
+import { ServicioDetailComponent } from './components/servicio-detail/servicio-detail/servicio-detail.component';
+import { LayoutComponent } from './components/layout/layout.component';
+
+const routes: Routes = [
+  {
+    path: '', component: LayoutComponent , children: [
+      {path: '', redirectTo: '/home', pathMatch: 'full'},
+      { 
+        path: 'home', 
+        // component: HomeComponent 
+        loadChildren: () => import('./components/home/home.module').then(m=>m.HomeModule)
+      },
+      { path: 'products', component: ProductsComponent },
+      { path: 'products/:id', component: ProductDetailComponent },
+      { path: 'servicios', component: ServiciosCardsComponent },
+      { path: 'servicios/:id', component: ServicioDetailComponent },
+      { path: 'contact', component: ContactComponent },
+      { path: 'pruebas', component: PruebasComponent },
+      { path: '**', component: PaginaNoEncontradaComponent }
+    ]
+  },
+
+];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes, {
+    preloadingStrategy: PreloadAllModules
+  })],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }
+
+```
+En resumen, se crea un módulo para cáda página del sitio. Dentro de éste modulo, se declaran los componentes, pipes, etc que EL MISMO MODULO USARÁ, Es importante mencionar que se tiene que crear un componente del módulo en sí, en la carpeta de componentes del módulo.
+Las rutas de `app-routing.module.ts` llaman al modulo home y el modulo home invoca a los componentes que usará 
 
 Los modulos y rutas sirven para abstraer y dividir mejor por dominio nuestra aplicación.
 En Angular tenemos 2 modulos especiales: `Core` y `Shered`, el primero sirve para guardar todos los servicios o componentes que se van a usar en todos los otros modulos, es decir, se genera una sola referencia de él, peculiarmente aquí se puede tener un servicio de autentificacion ya que en una aplicacion real, solo debe existir un servicio que maneje la autentificacion de los usuarios. En cuanto al modulo shered, aquí se pueden tener componentes y servicios compartidos, por ejemplo un componente que es utilizado por distintos modulos.
