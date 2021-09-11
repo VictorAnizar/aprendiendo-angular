@@ -138,7 +138,7 @@ export class HomeRoutingModule{
 }
 ```
 Sin embargo, en el archivo del módulo del home,, tenemos que importar todo lo que el componente usa (Componentes, Pipes, directivas e, incluso, el componente home en sí):
-```
+```javascript
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BannerComponent } from './components/banner/banner.component';
@@ -264,6 +264,90 @@ Las rutas de `app-routing.module.ts` llaman al modulo home y el modulo home invo
 
 Los modulos y rutas sirven para abstraer y dividir mejor por dominio nuestra aplicación.
 En Angular tenemos 2 modulos especiales: `Core` y `Shered`, el primero sirve para guardar todos los servicios o componentes que se van a usar en todos los otros modulos, es decir, se genera una sola referencia de él, peculiarmente aquí se puede tener un servicio de autentificacion ya que en una aplicacion real, solo debe existir un servicio que maneje la autentificacion de los usuarios. En cuanto al modulo shered, aquí se pueden tener componentes y servicios compartidos, por ejemplo un componente que es utilizado por distintos modulos.
+
+Ahora bien en cuanto a los componentes, directivas o pipes que son usados por más de un componente, lo recomendable es crear una carpeta llamada "shared" la cual va a ser un módulo, es decir, va a tener dentro de ella, un archivo llamado `shared.module.ts`, en éste archivo estarán declaradas todas las herramientas que serán compartidas, un buen ejemplo de herramientas compartidas son los componentes "header" y "footer", el archivo ``shared.module.ts` quedaría de la siguiente forma
+```javascript
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ExponentialPipe } from './pipes/exponential/exponential.pipe';
+import { SumaPipePipe } from './pipes/suma/suma-pipe.pipe';
+import { HighlightDirective } from './directives/highlight/highlight.directive';
+import { FooterComponent } from './components/footer/footer.component';
+import { HeaderComponent } from './components/header/header.component';
+
+
+@NgModule({
+  declarations: [ExponentialPipe, SumaPipePipe, HighlightDirective, FooterComponent, HeaderComponent],
+  exports: [ExponentialPipe, SumaPipePipe, HighlightDirective, FooterComponent, HeaderComponent],
+  imports: [
+    CommonModule
+  ]
+})
+export class SharedModule { }
+
+```
+
+Y, de igual forma que con los componentes no compartidos, el archivo  `app.module.ts` sufrirá modificaciones, pues en él se le eliminarán las declaraciones que tiene `shared.module.ts`, y quedaría de la siguiente forma:
+```javascript
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { ProductComponent } from './components/product/product.component';
+import { CartComponent } from './components/cart/cart.component';
+//import { ExponentialPipe } from './pipes/exponential/exponential.pipe';
+//import { SumaPipePipe } from './pipes/suma/suma-pipe.pipe';
+//import { HighlightDirective } from './directives/highlight/highlight.directive';
+// import { HomeComponent } from './components/home/home.component';
+import { ProductsComponent } from './components/products/products.component';
+//import { ContactComponent } from './components/contact/contact.component';
+import { PruebasComponent } from './components/pruebas/pruebas.component';
+//import { HeaderComponent } from './components/shared/components/header/header.component';
+//import { FooterComponent } from './components/footer/footer.component';
+//import { BannerComponent } from './components/banner/banner.component';
+import { PaginaNoEncontradaComponent } from './components/pagina-no-encontrada/pagina-no-encontrada.component';
+import { ProductDetailComponent } from './components/product-detail/product-detail.component';
+//import { ServicioCardComponent } from './components/servicios-cards/components/servicio-card/servicio-card.component';
+//import { ServiciosCardsComponent } from './components/servicios-cards/servicios-cards.component';
+//import { ServicioDetailComponent } from './components/servicio-detail/servicio-detail.component';
+import { LayoutComponent } from './components/layout/layout.component';
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    ProductComponent,
+    CartComponent,
+    //ExponentialPipe,
+    //SumaPipePipe,
+    //HighlightDirective,
+    // HomeComponent,
+    ProductsComponent,
+    //ContactComponent,
+    PruebasComponent,
+    //HeaderComponent,
+    //FooterComponent,
+    //BannerComponent,
+    PaginaNoEncontradaComponent,
+    ProductDetailComponent,
+    //ServicioCardComponent,
+    //ServiciosCardsComponent,
+    //ServicioDetailComponent,
+    LayoutComponent
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+```
+De esta forma, los módulos que quieran usar alguna herramienta compartida, tendrán que importar el módulo "shared", por ejemplo, si el módulo "home" usara algún componente compartido, éste último módulo, tendría que importar a "shared"
+
 
 ## Routing
 1. Para que se pueda tener un componente por "página" en la app angular es importante que en el html, esté la etiqueta: `<base href="/">` en el head
