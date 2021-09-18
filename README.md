@@ -348,6 +348,109 @@ export class AppModule { }
 ```
 De esta forma, los módulos que quieran usar alguna herramienta compartida, tendrán que importar el módulo "shared", por ejemplo, si el módulo "home" usara algún componente compartido, éste último módulo, tendría que importar a "shared"
 
+Por otro lado los módulos tipo "Core" sirven para que sean usados por otros elementos sin la necesidad de importarlos. Es una buena práctica meter a los services dentro de este tipo de módulos
+```javascript
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+import { ServicioService } from './services/servicio/servicio.service';
+import { ProductsService } from './services/products/products.service';
+
+@NgModule({
+  declarations: [],
+  imports: [
+    CommonModule
+  ],
+  providers:[
+    ServicioService,
+    ProductsService
+  ]
+})
+export class CoreModule { }
+
+```
+Finalmente, en la parte del `app.module.ts`, se tiene  que borrar las referencias de los servicios e importar el módulo como se hizo con "shared"
+
+
+### Guardianes
+
+Angular nos provee de una herramienta para poder determinar quién puede entrar o no a una ruta en específico. Un buen ejemplo de su uso es para restringir la entrada a ciertas páginas del sitio web a usuarios que tienen o no ciertas características, por ejemplo si están registrados o no o si tienen la sesión iniciada.
+En Angular existen distinos tipos de guardianes.
+
+#### CanActivate: 
+Mira si el usuario puede acceder a una página determinada.
+
+#### CanActivateChild: 
+Mira si el usuario puede acceder a las páginas hijas de una determinada ruta.
+
+#### CanDeactivate: 
+Mira si el usuario puede salir de una página, es decir, podemos hacer que aparezca un mensaje, por ejemplo, de comfirmación, si el usuario tiene cambios sin guardar.
+
+#### CanLoad: 
+Sirve para evitar que la aplicación cargue los módulos perezosamente si el usuario no está autorizado a hacerlo.
+
+Por ejemplo, se crea un guard de tipo `CanActivate` y con nombre "admin", para activar este guard, nos dirigimos al archivo `app-routing.module.ts`, importamos al guard y agregamos la sentencia `canActivate: [AdminGuard]` en cualquier ruta que queramos bloquear, quedando el archivo anterior, de la sig. forma: 
+```javascript
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes, PreloadAllModules } from '@angular/router';
+// import { HomeComponent } from './components/home/home.component';
+import { ProductsComponent } from './components/products/products.component';
+//import { ContactComponent } from './components/contact/contact.component';
+// import { PruebasComponent } from './components/pruebas/pruebas.component';
+import { PaginaNoEncontradaComponent } from './components/pagina-no-encontrada/pagina-no-encontrada.component';
+import { ProductDetailComponent } from './components/product-detail/product-detail.component';
+// import { ServiciosCardsComponent } from './components/servicios-cards/servicios-cards.component';
+import { ServicioDetailComponent } from './components/servicio-detail/servicio-detail.component';
+import { LayoutComponent } from './components/layout/layout.component';
+import { AdminGuard } from './guardianes/admin.guard';
+
+const routes: Routes = [
+  {
+    path: '', component: LayoutComponent, children: [
+      { path: '', redirectTo: '/home', pathMatch: 'full' },
+      {
+        path: 'home',
+        // component: HomeComponent 
+        loadChildren: () => import('./components/home/home.module').then(m => m.HomeModule)
+      },
+      { path: 'products', component: ProductsComponent },
+      { path: 'products/:id', component: ProductDetailComponent },
+      {
+        path: 'servicios',
+        loadChildren: () => import('./components/servicios-cards/servicios-cards.module').then(m => m.ServiciosCardsModule)
+        //component: ServiciosCardsComponent 
+      },
+      { path: 'servicios/:id', component: ServicioDetailComponent },
+      {
+        path: 'contact',
+        loadChildren: () => import('./components/contact/contact.module').then(m => m.ContactModule)
+      },
+      {
+        path: 'pruebas', 
+        loadChildren: ()=>import('./components/pruebas/pruebas.module').then(m=>m.PruebasModule),
+        canActivate: [AdminGuard]
+      },
+      { path: '**', component: PaginaNoEncontradaComponent }
+    ]
+  },
+
+];
+
+@NgModule({
+  imports: [
+    RouterModule.forRoot(routes, {
+      preloadingStrategy: PreloadAllModules
+    })
+  ],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }
+
+```
+
+Una Liga muy interesante es la siguiente <https://codingpotions.com/angular-seguridad/>
+
+
 
 ## Routing
 1. Para que se pueda tener un componente por "página" en la app angular es importante que en el html, esté la etiqueta: `<base href="/">` en el head
@@ -355,7 +458,7 @@ De esta forma, los módulos que quieran usar alguna herramienta compartida, tend
 2. Se crea un archivo app-routing dentro de él va a estar toda la configuracion de rutas de la app.
     1. Se importan los modulos del ruter de angular
     2. Se importan los componentes
-    3. Se hace un array de configuracion de rutas (Array de JSON's, éstos van a tener la estructura {path: '', component: componente})
+    3. Se hace un array de configuracion de rutas (Array de JSON's, éstos van a tener la estructura `{path: '', component: componente}`)
     4. Se exporta el módulo de rutas
 
 3. Se importa el archivo en app.module.ts 
@@ -404,11 +507,61 @@ Para empezar a crearlos, se puede empezar por la creacion de la carpeta `/servic
 
 Para consumir un servicio externo, es muy similar a consumir un servicio "local". La diferencia aqui es que se tiene que importar la clase `HttpClient, HttpHeaders` y `Observable`.
 Se siguien los puntos 1, 2 y 3 de "Servicios"
-Se crea un atributo que contrndrá la URL principal del servicio exterior, por ejemplo: `https://reqres.in`, a partir de esta URL se pueden ir agregando las "subrutas" para que se consulte determinada informacion. Por ejemplo si se quisiera obtener todos los usuarios de la API, se deberia de crear una funcion que devuelva los usuarios:
-<kbd>getUsers(): Observable<any>{
-        return this._http.get(this.url+"/api/users?page=2");
-}</kbd>
+Se crea un atributo que contrndrá la URL principal del servicio exterior, por ejemplo: `https://reqres.in`, a partir de esta URL se pueden ir agregando las "subrutas" para que se consulte determinada informacion. 
 
+Todo lo anterior debe de importarse en los respectivos servicios, luego los componentes pueden comsumir esos servicios y así poder mostrar la info. Por ejemplo:
+Info del servicio de comidas:
+```javascript
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Comida } from 'src/app/models/comida';
+
+
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ComidasService {
+  comida: Comida;
+  constructor(public httpClient: HttpClient) { }
+  getRandomMeal(){
+    return this.httpClient.get<any>('https://www.themealdb.com/api/json/v1/1/random.php');
+  }
+}
+
+```
+
+Luego, el componente "pruebas" puede consumir el servicio importando en su archivo ts lo sig:
+```javascript
+import { Comida } from 'src/app/models/comida';
+import { ComidasService } from 'src/app/components/core/services/comidas/comidas.service';
+``` 
+La primer importacion es para poder crear alguna variable o arreglo de TIPO "comida" que serán necesarios para almacenar la info
+La segunda importacipon nos obluga a hacer una inyección de dependencias en la sección de parámetros del constructor del componente de pruebas, quedando un conjunto de sentencias de la siguiente manera
+```javascript
+comidasArray: Comida[]=[];
+  constructor(public comidasService: ComidasService) {
+    //this.fetchUnaComida();
+    this.fetchVariasComidas(4, this.comidasArray);
+  }
+  fetchUnaComida() {
+    this.comidasService.getRandomMeal().subscribe(
+      meal => {
+        this.comidaaa = meal.meals[0];
+      });
+  }
+
+  fetchVariasComidas(numeroComidas: number, arregloComidas: Comida[]) {
+    for (let i = 1; i <= numeroComidas; i++) {
+      this.comidasService.getRandomMeal().subscribe(
+        meal => {          
+          arregloComidas.push(meal.meals[0]);
+        });
+    }
+
+
+  }
+```
 
 ## Formularios de contacto
 
@@ -420,10 +573,123 @@ En el componente de contacto como tal, es importante importar el modelo anterior
 
 Volviendo a la vista del componente, cada input se debe relacionar con cada atributo del componente como tal. Esto se logra con la directiva `[(ngModel)="atributo"]`. Esto, con el objetivo de que cuando se de click al boton de enviar, se pueda tener acceso al objeto contactoUsuario declarado en el componente como tal.
 
+### Formularios reactivos
+Los formluarios reactivos son más potentes pues nos permiten realizar más acciones como pruebas unitarias. Para Usar un formulario reactivo se necesita importar en el módulo de contaccto `
+```javascript 
+import { ReactiveFormsModule } from '@angular/forms';
+```
+Y en el archivo ts del componente es importante importar
+```javascript
+import { FormControl, Validator } from '@angular/forms';
+```
+El primero es para tener control sobre los campos y el segundo es una opción que nos ofrece angular para validaciones
+
+Lo primero que hay que hacer es crear el HTML, pero en la parte de los inputs deberia de tener una estrctura similar a:
+```html
+    <form class="cmxform" id="commentForm" method="GET" action="">
+    <mat-form-field id="campo_nombre" class="example-full-width" appearance="fill">
+        <mat-label for="input_nombre_contacto">Nombre:</mat-label>
+        <input matInput  type="text" name="input_nombre_contacto" id="input_nombre_contacto" [formControl]="nameField">
+        <p class="alertMistake" *ngIf="nameField.valid &&nameField.touched"><span>El campo no es válido</span></p>
+
+    </mat-form-field>
+    <mat-form-field id="campo_email" class="example-full-width" appearance="fill">
+        <mat-label for="input_email_contacto">Email</mat-label>
+        <input matInput  type="email" name="input_email_contacto" id="input_email_contacto" [formControl]="emailField">
+        <p class="alertMistake" *ngIf="!emailField.valid && emailField.touched"><span>El campo no es válido</span></p>
+    </mat-form-field>
+    <mat-form-field id="campo_mensaje" class="example-full-width" appearance="fill">
+        <mat-label for="input_mensaje_contacto">Mensaje</mat-label>
+        <textarea matInput  type="text" name="input_mensaje_contacto" id="input_mensaje_contacto" [formControl]="mensajeField"></textarea>
+        <p class="alertMistake" *ngIf="!mensajeField.valid && mensajeField.touched"><span>El campo no es válido</span></p>
+
+    </mat-form-field>
+    <div id="boton_enviar">
+        <button [disabled]="emailField.invalid || nameField.invalid || mensajeField.invalid" type="submit" id="button_enviar" mat-button color="primary" (click)="sendContact()">Enviar</button>
+    </div>
+</form>
+
+```
+y en el archivo ts: 
+```javascript
+import { Component, OnInit } from '@angular/core';
+//importamos a forms
+import { FormControl, Validator, Validators } from '@angular/forms';
+@Component({
+  selector: 'app-contact',
+  templateUrl: './contact.component.html',
+  styleUrls: ['./contact.component.scss']
+})
+export class ContactComponent implements OnInit {
+
+  nameField: FormControl;
+  emailField: FormControl;
+  mensajeField: FormControl;
+  constructor() {
+    this.nameField=new FormControl(
+      'Your Name', 
+      [
+        Validators.required,
+        //valores minimos y maximos del campo de email
+        Validators.minLength(4), 
+        Validators.maxLength(10)
+      ]
+      );
+    this.emailField=new FormControl(
+      'example@example', 
+      [
+        Validators.required,
+        //valores minimos y maximos del campo de email
+        Validators.minLength(4), 
+        Validators.maxLength(10)
+      ]
+      );
+    this.mensajeField=new FormControl(
+      'Your Message', 
+      [
+        Validators.required,
+        //valores minimos y maximos del campo de email
+        Validators.minLength(4), 
+        Validators.maxLength(50)
+      ]
+      );
+      //escuchamos el cambio dinamicamente
+    this.emailField.valueChanges.subscribe(value=>{
+      console.log(value);
+    })
+    // this.emailField
+   }
+
+  ngOnInit(): void {
+    
+  }
+  sendContact(){
+    if(this.emailField.valid && this.nameField.valid && this.mensajeField.valid ){
+      alert("Mensaje enviado"); 
+    }
+  }
+
+}
+
+```
+
 ## Lazy load
 Es una técnicq profesiona el angular que sirve para reducir el peso de las aplicaciones para hacer que carguen más rápido. Se basa en fragmentar ciertos archivos JS para que estos pequeños fragmentos se carguen solo cuando sea necesario. 
 Para usar ésta técnica es necesario modularizar nuestro proyecto.
 Los componentes que funcionan como páginas como tal, se pueden dividir en módulos (generar archivos .module.ts y agregar respectivas importaciones de clases). dentro de la carpeta del componente que actúa como página (p. ej. componente home), se debe crear una carpeta components en donde estarán los componentes que usa el componente home
+
+## Angular Material
+Es una herramienta para mejorar nuestro entorno gráfico con angular, para usarlo, basta con ejecutar `ng add @angular/material `
+
+<https://material.angular.io/>
+
+### Angular Schematic
+Es una opción que nos ofrecé angular material para crear vistas, son de mucha utilidad para poder crear una sección de administración. Para ello, basta con crear un módulo "admin" el cual va a aimportar el módulo de material previamente instalado. Se crea una carpeta de componentes para "admin". Para generar éstos componentes es bueno revisar la sig documentacion: <https://material.angular.io/guide/schematics/> Pero aún así para genera algun componente de schematics, se usa
+`ng generate @angular/material:dashboard <component-name>`
+
+
+## Ambientes
+Cuando se está creando una aplicación en Angular es común tener varios ambientes: por ejemplo se puede tener uno de desarrollo, uno de pre-producción y uno de producción
 
 ## Readme default
 
